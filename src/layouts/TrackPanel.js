@@ -442,8 +442,9 @@ const CenterMap = ({ currentLocation }) => {
 
       const coordinates = waypoints.map(([lat, lng]) => `${lng},${lat}`).join(';');
       const { data } = await axios.get(
-        `https://router.project-osrm.org/trip/v1/driving/${coordinates}?overview=full&geometries=geojson`,
-        { timeout: 10000 }
+        `https://router.project-osrm.org/trip/v1/driving/${coordinates}` +
+                `?overview=full&geometries=geojson&steps=true` +
+                `&source=first&destination=last&roundtrip=false`
       );
 
       const newPath = data.trips[0].geometry.coordinates.map(([lng, lat]) => [lat, lng]);
