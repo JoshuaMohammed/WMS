@@ -517,9 +517,6 @@ const checkDeviations = useCallback(async (initialCheck = false) => {
 
     const ACCURACY_THRESHOLD = 35; 
 
-
-
-
     const watchId = navigator.geolocation.watchPosition(
       position => {
         const newCoords = position.coords;
@@ -531,7 +528,7 @@ const checkDeviations = useCallback(async (initialCheck = false) => {
         }
       },
       error => setLocationError(error.message),
-      { enableHighAccuracy: true, maximumAge: 0, timeout: 5000 }
+      { enableHighAccuracy: true, maximumAge: 0, timeout: 1000 }
     );
 
     backupInterval.current = setInterval(() => {
@@ -545,7 +542,7 @@ if (newCoords.accuracy <= ACCURACY_THRESHOLD) {
           }}
         },
         error => setLocationError(error.message))
-    }, 5000);
+    }, 2000);
 
     return () => {
       navigator.geolocation.clearWatch(watchId);
@@ -663,9 +660,6 @@ const handleEndTripAndLogout = async () => {
               </Media>
             </DropdownToggle>
               <DropdownMenu className="dropdown-menu-arrow dropdown-menu-custom">
-                <DropdownItem onClick={() => localStorage.clear()}>
-                  تسجيل الخروج
-                </DropdownItem>
                 <DropdownItem onClick={handleEndTripAndLogout}>
                   إنهاء الرحلة وتسجيل الخروج
                 </DropdownItem>
