@@ -514,7 +514,7 @@ const checkDeviations = useCallback(async (initialCheck = false) => {
       return;
     }
 
-    // const ACCURACY_THRESHOLD = 50; 
+    const ACCURACY_THRESHOLD = 50; 
 
       let lastAlertTime = 0; // To prevent too many alerts
         const ALERT_COOLDOWN = 30000; // 30 seconds between alerts
