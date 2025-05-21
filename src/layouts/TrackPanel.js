@@ -514,9 +514,28 @@ const checkDeviations = useCallback(async (initialCheck = false) => {
       return;
     }
 
+    // const ACCURACY_THRESHOLD = 50; 
+
+      let lastAlertTime = 0; // To prevent too many alerts
+        const ALERT_COOLDOWN = 30000; // 30 seconds between alerts
+
+        const showAccuracyAlert = (accuracy) => {
+          const now = Date.now();
+          if (now - lastAlertTime > ALERT_COOLDOWN) {
+            window.alert(`GPS Accuracy: ${Math.round(accuracy)} meters\n\n` + 
+                        (accuracy <= ACCURACY_THRESHOLD 
+                          ? "Good accuracy - position will be used"
+                          : "Poor accuracy - position will be ignored"));
+            lastAlertTime = now;
+          }
+        };
+
+
     const watchId = navigator.geolocation.watchPosition(
       position => {
         const newCoords = position.coords;
+        showAccuracyAlert(newCoords.accuracy); // Show popup with accuracy
+
         if (!currentLocation || haversineDistance(currentLocation, newCoords) > 5) {
           setCurrentLocation(newCoords);
           updateTruckLocation(newCoords.latitude, newCoords.longitude);
@@ -530,6 +549,8 @@ const checkDeviations = useCallback(async (initialCheck = false) => {
       navigator.geolocation.getCurrentPosition(
         position => {
           const newCoords = position.coords;
+        showAccuracyAlert(newCoords.accuracy); // Show popup with accuracy
+
           if (!currentLocation || haversineDistance(currentLocation, newCoords) > 5) {
             setCurrentLocation(newCoords);
             updateTruckLocation(newCoords.latitude, newCoords.longitude);
